@@ -1,14 +1,18 @@
+import "../css/MovieCard.css"
+
 function MovieCard({movie}){
 
     function onFavClick(){
         alert("clicked")
-    }
+    } 
     return (
         <div className="movie-card">
             <div className="movie-poster">
-                <img src={movie.url} alt={movie.title}/>
+                {/* <img src={movie.url} alt={movie.title}/> */}
+                <img src={movie.url || "https://via.placeholder.com/300x450"} alt={movie.title}/>
+
                 <div className="movie-overlay">
-                    <button className="fav-btn" onClick={onFavClick}>
+                    <button className="favorite-btn" onClick={onFavClick}>
                         ♡🤍
                     </button>
                 </div>
