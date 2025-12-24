@@ -42,6 +42,11 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 1rem;
+    pointer-events: none;
+  }
+  
+  .movie-overlay .favorite-btn {
+    pointer-events: auto;
   }
   
   .movie-card:hover .movie-overlay {
@@ -63,6 +68,9 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s;
+    cursor: pointer;
+    border: none;
+    z-index: 10;
   }
   
   .favorite-btn:hover {

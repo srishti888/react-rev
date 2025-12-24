@@ -5,16 +5,45 @@ import {searchMovies, getPopularMovies} from '../services/api'
 
 function Home(){
     const [searchQuery, setSearchQuery] = useState("");
-    const movies = [
-        {id: 1, title: "stranger things", release_date: "25 dec 2025"},
-        {id: 2, title: "terminator", release_date: "1999"},
-        {id: 3, title: "the sky is pink", release_date: "2018"},
-        {id: 4, title: "dhurandar", release_date: "11 dec 2025"}
-    ];
+    const [movies, setMovies] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const handleSearch = (e) => {
+    useEffect(() => {
+        const loadPopularMovies = async() => {
+            try {
+                const popularMovies = await getPopularMovies()
+                setMovies(popularMovies)
+            }catch(err) {
+                console.log(err)
+                setError("failed to load movies...")
+            }
+            finally{
+                setLoading(false)
+            }
+        }
+
+        loadPopularMovies()
+    }, [])
+
+    const handleSearch = async (e) => {
         e.preventDefault()
-        alert(searchQuery)
+
+        if(!searchQuery.trim()) return
+        if(loading) return
+
+        setLoading(true)
+
+        try{
+            const searchResults = await searchMovies( searchQuery)
+            setMovies(searchResults)
+            setError(null)
+        } catch (err) {
+            console.log(err)
+            setError("failed to search movies...")
+        } finally{
+            setLoading(false)
+        }
     }
 
     return  <div className="home">
@@ -30,11 +59,16 @@ function Home(){
          </button>
 
         </form>
+        
+        {error && <div className="error-msg">{error}</div>}
 
-        <div className="movie-grid"> 
+        {loading? <div className="loading">Loading...</div> :
+            <div className="movie-grid"> 
         {movies.map( (movie) => 
           <MovieCard movie={movie} key={movie.id}/>)}
         </div>
+         }
+        
     </div>
    
    
